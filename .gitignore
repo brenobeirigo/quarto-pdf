@@ -1,0 +1,10 @@
+/.quarto/
+**/.quarto/
+**/_extensions/brenobeirigo/
+/example/_extensions/
+*.pdf
+*.tex
+!/_extensions/**/*.tex
+*.log
+*_files/
+/example/_book/

@@ -1,0 +1,54 @@
+% press: layout shared by every style. Loaded before the style file.
+\usepackage{etoolbox}
+\usepackage{xcolor}
+
+% Long code lines wrap instead of running into the margin.
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaklines,breakanywhere,commandchars=\\\{\}}
+
+\usepackage{multirow}
+\usepackage{microtype}
+\usepackage{needspace}
+\usepackage{caption}
+\usepackage{framed}
+\emergencystretch=2em
+\widowpenalty=7000
+\clubpenalty=7000
+\raggedbottom
+
+% Clamp diagrams and images to the printable area.
+\usepackage[export]{adjustbox}
+\usepackage{letltxmacro}
+\AtBeginDocument{%
+  \LetLtxMacro\ORIincludegraphics\includegraphics
+  \renewcommand{\includegraphics}[2][]{%
+    \ORIincludegraphics[#1,max width=\linewidth,max height=0.76\textheight]{#2}}}
+
+% Colour roles. Every style redefines these; `press.colors` overrides them.
+\definecolor{pressink}{HTML}{222222}
+\definecolor{pressstrong}{HTML}{111111}
+\definecolor{pressaccent}{HTML}{444444}
+\definecolor{pressaccentdark}{HTML}{333333}
+\definecolor{pressaccentlight}{HTML}{888888}
+\definecolor{presssecondary}{HTML}{444444}
+\definecolor{pressmuted}{HTML}{666666}
+\definecolor{pressrule}{HTML}{DDDDDD}
+\definecolor{presssoft}{HTML}{F5F5F5}
+
+% Separator placed between list items in cover fields. Styles may redefine it.
+\newcommand*{\presssep}{\quad\textbullet\quad}
+
+% Title-page fields. The filter defines \presstitle, \presssubtitle,
+% \pressauthor, \pressinstitution, \pressseries, \presslabel, \presstagline and
+% \pressedition from `press.cover`. Title, subtitle and author fall back to the
+% document's own metadata.
+\makeatletter
+\providecommand*{\@subtitle}{}
+\newcommand{\pressifset}[2]{\ifdefempty{#1}{}{#2}}
+\newcommand*{\presstitlefield}{\ifdefempty{\presstitle}{\@title}{\presstitle}}
+\newcommand*{\presssubtitlefield}{\ifdefempty{\presssubtitle}{\@subtitle}{\presssubtitle}}
+\newcommand*{\pressauthorfield}{%
+  \ifdefempty{\pressauthor}{{\def\and{\unskip,\space}\@author}}{\pressauthor}}
+\newcommand{\pressifsubtitle}[1]{%
+  \ifboolexpr{test {\ifdefempty{\presssubtitle}} and test {\ifdefempty{\@subtitle}}}{}{#1}}
+\makeatother

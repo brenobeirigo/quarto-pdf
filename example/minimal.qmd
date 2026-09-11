@@ -1,0 +1,17 @@
+---
+title: "Press PDF: the minimal style"
+subtitle: "Greyscale, no running heads, a quiet title page"
+author: "Ada Lovelace"
+format:
+  press-pdf:
+    documentclass: scrartcl
+    press:
+      style: minimal
+      colors:
+        secondary: "#8C2F39"
+      cover:
+        institution: Example University
+        edition: 2026 edition
+---
+
+{{< include _content.qmd >}}

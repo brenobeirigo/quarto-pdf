@@ -1,0 +1,82 @@
+% classic: serif headings, centred chapter titles with a short burgundy rule,
+% italic running heads, and a centred title page.
+\definecolor{pressink}{HTML}{1E1E24}
+\definecolor{pressstrong}{HTML}{14213D}
+\definecolor{pressaccent}{HTML}{8C2F39}
+\definecolor{pressaccentdark}{HTML}{6B1E28}
+\definecolor{pressaccentlight}{HTML}{D8A7A0}
+\definecolor{presssecondary}{HTML}{14213D}
+\definecolor{pressmuted}{HTML}{5C5C66}
+\definecolor{pressrule}{HTML}{C9C4BC}
+\definecolor{presssoft}{HTML}{F6F2EC}
+
+\renewcommand*{\presssep}{\quad\textperiodcentered\quad}
+
+\makeatletter
+\ifdefined\KOMAClassName
+  \setkomafont{disposition}{\normalfont\bfseries\color{pressink}}
+  \@ifundefined{chapter}{}{%
+    \setkomafont{chapter}{\normalfont\Huge\color{pressink}}%
+    \renewcommand*{\raggedchapter}{\centering}%
+    \renewcommand\chapterlinesformat[3]{%
+      #2#3\par\nobreak
+      \vspace{0.5\baselineskip}%
+      {\color{pressaccent}\rule{0.12\linewidth}{0.8pt}}\par}}
+
+  \usepackage[automark]{scrlayer-scrpage}
+  \pagestyle{scrheadings}
+  \clearpairofpagestyles
+  \ihead{\headmark}
+  \ohead*{\pagemark}
+  \setkomafont{pageheadfoot}{\small\itshape\color{pressmuted}}
+  \setkomafont{pagenumber}{\small\normalfont\color{pressink}}
+\fi
+\makeatother
+
+\captionsetup{font={small},labelfont={bf,color=pressaccentdark},skip=8pt}
+
+\renewenvironment{quote}{%
+  \def\FrameCommand{{\color{pressrule}\vrule width 0.8pt}\hspace{1.2em}}%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}\noindent\itshape}
+ {\endMakeFramed}
+
+\AtBeginDocument{%
+  \hypersetup{linkcolor=pressaccentdark,urlcolor=pressstrong,citecolor=pressaccentdark}%
+  \colorlet{quarto-callout-note-color}{pressstrong}%
+  \colorlet{quarto-callout-note-color-frame}{pressstrong}%
+  \colorlet{quarto-callout-tip-color}{pressaccentdark}%
+  \colorlet{quarto-callout-tip-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-warning-color}{pressaccentdark}%
+  \colorlet{quarto-callout-warning-color-frame}{pressaccentlight}%
+  \colorlet{quarto-callout-important-color}{pressaccent}%
+  \colorlet{quarto-callout-important-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-caution-color}{pressmuted}%
+  \colorlet{quarto-callout-caution-color-frame}{pressmuted}}
+
+\renewcommand{\maketitle}{%
+  \begin{titlepage}%
+  \centering
+  {\large\scshape\color{pressmuted}\pressinstitution\par}
+  \vspace*{30mm}
+  {\color{pressaccent}\rule{0.2\textwidth}{0.8pt}}\par
+  \vspace{10mm}
+  \pressifset{\pressseries}{%
+    {\scshape\color{pressaccentdark}\pressseries\par}
+    \vspace{6mm}}%
+  {\fontsize{28}{34}\selectfont\color{pressink}\presstitlefield\par}
+  \pressifsubtitle{%
+    \vspace{7mm}
+    {\Large\itshape\color{pressmuted}\presssubtitlefield\par}}%
+  \vspace{10mm}
+  {\color{pressaccent}\rule{0.2\textwidth}{0.8pt}}\par
+  \vspace{14mm}
+  {\large\color{pressink}\pressauthorfield\par}
+  \vfill
+  \pressifset{\presslabel}{{\color{pressink}\presslabel\par}}%
+  \pressifset{\presstagline}{%
+    \vspace{2mm}
+    {\small\itshape\color{pressmuted}\presstagline\par}}%
+  \pressifset{\pressedition}{%
+    \vspace{6mm}
+    {\small\scshape\color{pressmuted}\pressedition\par}}%
+  \end{titlepage}}

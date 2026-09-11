@@ -1,0 +1,17 @@
+---
+title: "Press PDF: the dact style"
+subtitle: "Sans headings, a green accent rule, and a banded title page"
+author: "Ada Lovelace"
+format:
+  press-pdf:
+    press:
+      style: dact
+      cover:
+        institution: [Example University, Faculty of Engineering]
+        series: Course manual series
+        label: Module 1 course manual
+        tagline: [Formulate, Design, Trace, Test, Improve]
+        edition: 2026 edition
+---
+
+{{< include _content.qmd >}}

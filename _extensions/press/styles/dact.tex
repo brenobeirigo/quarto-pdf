@@ -1,0 +1,90 @@
+% dact: sans headings in near-black ink, a green accent rule under chapter
+% titles, running heads, and a banded title page.
+\definecolor{pressink}{HTML}{24272A}
+\definecolor{pressstrong}{HTML}{212529}
+\definecolor{pressaccent}{HTML}{35B779}
+\definecolor{pressaccentdark}{HTML}{187453}
+\definecolor{pressaccentlight}{HTML}{B1E35D}
+\definecolor{presssecondary}{HTML}{31688E}
+\definecolor{pressmuted}{HTML}{626A70}
+\definecolor{pressrule}{HTML}{DFE3E1}
+\definecolor{presssoft}{HTML}{F4F6F5}
+
+\makeatletter
+\ifdefined\KOMAClassName
+  \setkomafont{disposition}{\sffamily\bfseries}
+  \addtokomafont{section}{\color{pressink}}
+  \addtokomafont{subsection}{\color{pressink}}
+  \@ifundefined{chapter}{}{%
+    \addtokomafont{chapter}{\color{pressink}\huge}%
+    % Chapter title followed by a short accent rule and a long hairline.
+    \renewcommand\chapterlinesformat[3]{%
+      \@hangfrom{#2}{#3}\par\nobreak
+      \vspace{0.35\baselineskip}%
+      {\color{pressaccent}\rule{0.28\linewidth}{2.2pt}}%
+      {\color{pressrule}\rule{0.72\linewidth}{0.7pt}}\par}}
+
+  \usepackage[automark,headsepline=0.4pt]{scrlayer-scrpage}
+  \pagestyle{scrheadings}
+  \clearpairofpagestyles
+  \ihead{\headmark}
+  \ohead*{\pagemark}
+  \setkomafont{pageheadfoot}{\small\sffamily\color{pressmuted}}
+  \setkomafont{pagenumber}{\small\sffamily\color{pressink}}
+\fi
+\makeatother
+
+\captionsetup{font={small},labelfont={sf,bf,color=pressaccentdark},skip=8pt}
+
+\renewenvironment{quote}{%
+  \def\FrameCommand{{\color{pressaccent}\vrule width 2.5pt}\hspace{0.9em}}%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}\noindent}
+ {\endMakeFramed}
+
+\AtBeginDocument{%
+  \hypersetup{linkcolor=pressaccentdark,urlcolor=presssecondary,citecolor=pressaccentdark}%
+  \colorlet{quarto-callout-note-color}{presssecondary}%
+  \colorlet{quarto-callout-note-color-frame}{presssecondary}%
+  \colorlet{quarto-callout-tip-color}{pressaccentdark}%
+  \colorlet{quarto-callout-tip-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-warning-color}{pressstrong}%
+  \colorlet{quarto-callout-warning-color-frame}{pressaccentlight}%
+  \colorlet{quarto-callout-important-color}{pressaccentdark}%
+  \colorlet{quarto-callout-important-color-frame}{pressaccentdark}%
+  \colorlet{quarto-callout-caution-color}{pressmuted}%
+  \colorlet{quarto-callout-caution-color-frame}{pressmuted}}
+
+% Extra leading after a manual line break (`\` at the end of a cover line).
+\makeatletter
+\newcommand*{\presscoverbreak}[1]{\def\\{\@centercr[#1]}}
+\makeatother
+
+\renewcommand{\maketitle}{%
+  \begin{titlepage}%
+  \sffamily
+  \vspace*{-9mm}
+  {\noindent\color{pressstrong}\rule{\textwidth}{4pt}}\par
+  {\noindent\color{pressaccent}\rule{0.34\textwidth}{4pt}}\par
+  \vspace{6mm}
+  {\noindent\large\color{pressmuted}\pressinstitution\par}
+  \vspace{35mm}
+  \pressifset{\pressseries}{%
+    {\noindent\small\bfseries\color{pressaccentdark}\MakeUppercase{\pressseries}\par}
+    \vspace{5mm}}%
+  {\noindent\raggedright\presscoverbreak{2mm}\fontsize{31}{36}\selectfont\bfseries\color{pressink}\presstitlefield\par}
+  \pressifsubtitle{%
+    \vspace{8mm}
+    {\noindent\raggedright\presscoverbreak{1.5mm}\Large\color{pressmuted}\presssubtitlefield\par}}%
+  \vfill
+  \pressifset{\presslabel}{%
+    \setlength{\fboxsep}{7mm}%
+    \noindent\colorbox{presssoft}{\parbox{\dimexpr\textwidth-2\fboxsep\relax}{%
+      \color{pressink}\bfseries\presslabel\par
+      \pressifset{\presstagline}{%
+        \vspace{2mm}
+        \normalfont\color{pressmuted}\presstagline\par}}}
+    \vspace{12mm}}%
+  {\noindent\color{pressmuted}\pressauthorfield\hfill\pressedition\par}
+  \vspace{5mm}
+  {\noindent\color{pressstrong}\rule{\textwidth}{2pt}}\par
+  \end{titlepage}}

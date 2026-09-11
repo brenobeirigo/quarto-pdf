@@ -1,0 +1,31 @@
+title: Press PDF
+author: Breno Beirigo
+version: 0.1.0
+quarto-required: ">=1.4.0"
+contributes:
+  formats:
+    pdf:
+      pdf-engine: lualatex
+      documentclass: scrreprt
+      classoption:
+        - "fontsize=10.5pt"
+        - "numbers=noenddot"
+        - "chapterprefix=false"
+      papersize: a4
+      geometry:
+        - top=26mm
+        - bottom=29mm
+        - left=27mm
+        - right=27mm
+      mainfont: "TeX Gyre Pagella"
+      sansfont: "TeX Gyre Heros"
+      monofont: "Inconsolatazi4"
+      linestretch: 1.05
+      toc: true
+      toc-depth: 2
+      colorlinks: true
+      fig-pos: "htbp"
+      fig-width: 6.0
+      fig-height: 4.2
+      filters:
+        - press.lua

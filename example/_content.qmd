@@ -1,0 +1,63 @@
+# Getting started
+
+This document exercises the elements a style touches: chapter and section
+headings, running heads, captions, quotes, callouts, links, code, and tables.
+See @tbl-roles for the colour roles and the [Quarto
+documentation](https://quarto.org) for everything else.
+
+## Colour roles
+
+| Role        | Used for                                   |
+|-------------|--------------------------------------------|
+| `ink`       | body headings and title text               |
+| `accent`    | rules, quote bars, tip callout frames      |
+| `secondary` | URLs and note callouts                     |
+| `muted`     | running heads, subtitles, caution callouts |
+
+: Colour roles shared by every style. {#tbl-roles}
+
+> A quote uses the style's quote bar. Long quotations wrap normally and keep
+> the bar for their full height.
+
+## Callouts
+
+::: callout-note
+A note callout.
+:::
+
+::: callout-tip
+A tip callout.
+:::
+
+::: callout-warning
+A warning callout.
+:::
+
+::: callout-important
+An important callout.
+:::
+
+::: callout-caution
+A caution callout.
+:::
+
+# Code and mathematics
+
+Long code lines wrap instead of running into the margin:
+
+```python
+def total_cost(orders, rate, surcharge=0.0):
+    return sum(order.quantity * order.unit_price * (1 + rate) + surcharge for order in orders if order.is_confirmed)
+```
+
+The same holds for display mathematics:
+
+$$
+C = \sum_{i=1}^{n} q_i \, p_i \, (1 + r) + s .
+$$
+
+## A section with a footnote
+
+Running heads pick up the current chapter and section.[^1]
+
+[^1]: Footnotes use the body font.

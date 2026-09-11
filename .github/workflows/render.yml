@@ -1,0 +1,40 @@
+name: Render examples
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: quarto-dev/quarto-actions/setup@v2
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tinytex: true
+      - name: Install fonts
+        run: |
+          tlmgr_path="$(find "$HOME" -name tlmgr -print -quit)"
+          test -n "$tlmgr_path"
+          "$tlmgr_path" update --self
+          "$tlmgr_path" install tex-gyre inconsolata
+      - name: Install the extension into the example
+        working-directory: example
+        run: quarto add .. --no-prompt
+      - name: Render every style
+        working-directory: example
+        run: |
+          for style in dact classic minimal; do
+            quarto render "$style.qmd"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: example-pdfs
+          path: example/*.pdf

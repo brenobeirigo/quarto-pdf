@@ -1,0 +1,66 @@
+% minimal: greyscale sans headings, no running heads, a centred page number,
+% and a quiet left-aligned title page.
+\definecolor{pressink}{HTML}{1A1A1A}
+\definecolor{pressstrong}{HTML}{000000}
+\definecolor{pressaccent}{HTML}{1A1A1A}
+\definecolor{pressaccentdark}{HTML}{1A1A1A}
+\definecolor{pressaccentlight}{HTML}{BBBBBB}
+\definecolor{presssecondary}{HTML}{1F4E79}
+\definecolor{pressmuted}{HTML}{6B6B6B}
+\definecolor{pressrule}{HTML}{D9D9D9}
+\definecolor{presssoft}{HTML}{F3F3F3}
+
+\renewcommand*{\presssep}{\enspace/\enspace}
+
+\makeatletter
+\ifdefined\KOMAClassName
+  \setkomafont{disposition}{\sffamily\bfseries\color{pressink}}
+  \@ifundefined{chapter}{}{\setkomafont{chapter}{\sffamily\bfseries\LARGE\color{pressink}}}
+
+  \usepackage{scrlayer-scrpage}
+  \pagestyle{scrheadings}
+  \clearpairofpagestyles
+  \cfoot*{\pagemark}
+  \setkomafont{pageheadfoot}{\normalfont}
+  \setkomafont{pagenumber}{\small\sffamily\color{pressmuted}}
+\fi
+\makeatother
+
+\captionsetup{font={small},labelfont={bf},skip=8pt}
+
+\renewenvironment{quote}{%
+  \def\FrameCommand{{\color{pressrule}\vrule width 2pt}\hspace{0.9em}}%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}\noindent}
+ {\endMakeFramed}
+
+\AtBeginDocument{%
+  \hypersetup{linkcolor=presssecondary,urlcolor=presssecondary,citecolor=presssecondary}%
+  \colorlet{quarto-callout-note-color}{pressmuted}%
+  \colorlet{quarto-callout-note-color-frame}{pressaccentlight}%
+  \colorlet{quarto-callout-tip-color}{pressmuted}%
+  \colorlet{quarto-callout-tip-color-frame}{pressaccentlight}%
+  \colorlet{quarto-callout-warning-color}{pressink}%
+  \colorlet{quarto-callout-warning-color-frame}{pressink}%
+  \colorlet{quarto-callout-important-color}{pressink}%
+  \colorlet{quarto-callout-important-color-frame}{pressink}%
+  \colorlet{quarto-callout-caution-color}{pressmuted}%
+  \colorlet{quarto-callout-caution-color-frame}{pressmuted}}
+
+\renewcommand{\maketitle}{%
+  \begin{titlepage}%
+  \sffamily\raggedright
+  \vspace*{40mm}
+  \pressifset{\pressseries}{%
+    {\small\color{pressmuted}\pressseries\par}
+    \vspace{6mm}}%
+  {\fontsize{26}{32}\selectfont\bfseries\color{pressink}\presstitlefield\par}
+  \pressifsubtitle{%
+    \vspace{6mm}
+    {\large\color{pressmuted}\presssubtitlefield\par}}%
+  \vfill
+  \pressifset{\presslabel}{{\color{pressink}\presslabel\par}\vspace{1mm}}%
+  \pressifset{\presstagline}{{\small\color{pressmuted}\presstagline\par}\vspace{8mm}}%
+  {\color{pressink}\pressauthorfield\par}
+  \pressifset{\pressinstitution}{{\small\color{pressmuted}\pressinstitution\par}}%
+  \pressifset{\pressedition}{{\small\color{pressmuted}\pressedition\par}}%
+  \end{titlepage}}

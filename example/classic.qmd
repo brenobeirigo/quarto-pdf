@@ -1,0 +1,17 @@
+---
+title: "Press PDF: the classic style"
+subtitle: "Serif headings, centred chapter titles, and a centred title page"
+author: "Ada Lovelace"
+format:
+  press-pdf:
+    press:
+      style: classic
+      cover:
+        institution: Example University
+        series: Course manual series
+        label: Module 1 course manual
+        tagline: [Formulate, Design, Trace, Test, Improve]
+        edition: 2026 edition
+---
+
+{{< include _content.qmd >}}
