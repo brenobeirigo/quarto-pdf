@@ -5,10 +5,10 @@ typeset KOMA-Script layout (fonts, margins, wrapped code, clamped figures,
 coloured callouts) and a designed title page. Pick the look with a single
 option.
 
-| `lucid` | `classic` | `minimal` |
-|:------:|:---------:|:---------:|
-| ![lucid cover](images/lucid-cover.png) | ![classic cover](images/classic-cover.png) | ![minimal cover](images/minimal-cover.png) |
-| ![lucid page](images/lucid-page.png) | ![classic page](images/classic-page.png) | ![minimal page](images/minimal-page.png) |
+| `lucid` | `classic` | `minimal` | `ledger` |
+|:------:|:---------:|:---------:|:--------:|
+| ![lucid cover](images/lucid-cover.png) | ![classic cover](images/classic-cover.png) | ![minimal cover](images/minimal-cover.png) | ![ledger cover](images/ledger-cover.png) |
+| ![lucid page](images/lucid-page.png) | ![classic page](images/classic-page.png) | ![minimal page](images/minimal-page.png) | ![ledger page](images/ledger-page.png) |
 
 ## Install
 
@@ -55,11 +55,55 @@ the defaults below.
 | `lucid`   | sans, green accent rule      | chapter left, page right | banded, left-aligned, label box       |
 | `classic` | serif, centred chapter titles | italic, no rule         | centred, burgundy rules, small caps   |
 | `minimal` | sans, no decoration          | none; page number centred | quiet, left-aligned                  |
+| `ledger`  | serif, bold and compact      | code left, write-in lines right, hairlines | ruled header block with write-in boxes |
 
 `lucid` shares its palette with the
 [Lucid HTML theme](https://github.com/brenobeirigo/quarto-themes), so a book
 and its printed edition look alike. Before version 0.2.0 it was called
 `dact`. The old name still works but prints a deprecation warning.
+
+### ledger
+
+`ledger` is a ruled record sheet for exercises and exams. The first page opens
+with a header block instead of a title page, every callout is the same soft
+grey box, and the footer shows `page / total` with "Continued next page" on
+all but the last page. It is laid out for `scrartcl` with narrow margins:
+
+```yaml
+format:
+  press-pdf:
+    documentclass: scrartcl
+    toc: false
+    callout-appearance: simple
+    callout-icon: false
+    geometry: [top=18mm, bottom=18mm, left=18mm, right=18mm, heightrounded]
+    press:
+      style: ledger
+      cover:
+        title: Exercise sheet 3
+        label: Week 3
+        series: Applied Statistics
+        edition: Friday, 18 September 2026
+        subtitle: Sampling and estimation
+        author: "Examiner: Ada Lovelace"
+        code: EX-03
+        fields: ["Student ID:", "Name:"]
+```
+
+The header block puts `title` and `label` on the first row, `series` and
+`edition` on the second, and `subtitle` and `author` on the third. `code`
+leads the running head, and each entry in `fields` becomes a labelled box in
+the header and a short write-in line in the running head.
+
+`ledger` sets Libertinus Serif, Sans and Math when they are installed and
+otherwise keeps the format's fonts. With TinyTeX:
+
+```bash
+tlmgr install libertinus-fonts
+```
+
+In a report or book class the table of contents and chapters start new pages,
+so the header block sits alone on the first page.
 
 ### Your own style
 
@@ -80,7 +124,7 @@ All options live under the `press` key.
 
 | Option          | Default | Description |
 |-----------------|---------|-------------|
-| `style`         | `lucid` | `lucid`, `classic`, `minimal`, or a path to a `.tex` file. |
+| `style`         | `lucid` | `lucid`, `classic`, `minimal`, `ledger`, or a path to a `.tex` file. |
 | `colors.<role>` | style's | Six-digit hex colour for a role. Quote values that start with `#`. |
 | `cover.<field>` | empty   | Title-page text. Markdown is allowed. A list is joined with the style's separator. |
 
@@ -112,11 +156,14 @@ The LaTeX names are also available in your own `include-in-header` code.
 | `label`       | `\presslabel`       | |
 | `tagline`     | `\presstagline`     | |
 | `edition`     | `\pressedition`     | |
+| `code`        | `\presscode`        | Short label for running heads. Used by `ledger`. |
+| `fields`      | `\pressfields`      | Write-in labels. Each entry becomes `\pressfielditem{label}`. Used by `ledger`. |
 
 In a custom style, `\presstitlefield`, `\presssubtitlefield` and
 `\pressauthorfield` apply the fallbacks. `\pressifset{\macro}{...}` and
 `\pressifsubtitle{...}` print their content only when the field is set, and
-`\presssep` is the list separator.
+`\presssep` is the list separator. To lay out `fields`, define
+`\pressfielditem` and then expand `\pressfields`.
 
 A cover title with a manual line break:
 
@@ -181,9 +228,11 @@ quarto add .. --no-prompt
 quarto render lucid.qmd
 quarto render classic.qmd
 quarto render minimal.qmd
+quarto render ledger.qmd
 ```
 
 `minimal.qmd` also shows `documentclass: scrartcl` and a colour override.
+`ledger.qmd` shows the write-in fields.
 
 ## License
 

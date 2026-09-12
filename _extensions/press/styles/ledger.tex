@@ -1,0 +1,188 @@
+% ledger: a ruled record sheet for exercises and exams. Libertinus type when
+% installed, compact bold headings, a ruled header block with write-in fields
+% in place of a title page, small running heads between hairlines, soft grey
+% callouts, and a "Continued next page" footer. Designed for scrartcl on a
+% 10pt page with 18mm margins.
+%
+% Cover fields: title and label share the first row, series and edition the
+% second, subtitle and author the third. `code` leads the running head and
+% `fields` lists write-in labels (for example Student ID: and Name:).
+\definecolor{pressink}{HTML}{000000}
+\definecolor{pressstrong}{HTML}{000000}
+\definecolor{pressaccent}{HTML}{929292}
+\definecolor{pressaccentdark}{HTML}{5C5C5C}
+\definecolor{pressaccentlight}{HTML}{C8C8C8}
+\definecolor{presssecondary}{HTML}{0000FF}
+\definecolor{pressmuted}{HTML}{5C5C5C}
+\definecolor{pressrule}{HTML}{000000}
+\definecolor{presssoft}{HTML}{F6F6F6}
+
+\makeatletter
+% Libertinus replaces the format's fonts only where it is installed, so a
+% machine without it still renders with the fonts set in YAML.
+\@ifpackageloaded{fontspec}{%
+  \IfFontExistsTF{Libertinus Serif}{\setmainfont{Libertinus Serif}}{}%
+  \IfFontExistsTF{Libertinus Sans}{\setsansfont{Libertinus Sans}}{}%
+  \@ifpackageloaded{unicode-math}{%
+    \IfFontExistsTF{Libertinus Math}{\setmathfont{Libertinus Math}}{}}{}}{}
+\makeatother
+
+\usepackage{lastpage}
+\usepackage{refcount}
+\usepackage{tabularx}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Folio and the continued-page note, both read from the LastPage label.
+\newcommand*{\presscontinuedtext}{Continued next page}
+\newcommand*{\pressfolio}{\pagemark{} / \getpagerefnumber{LastPage}}
+\newcommand*{\presscontinued}{%
+  \ifnum\value{page}<\getpagerefnumber{LastPage}\relax\presscontinuedtext\fi}
+
+\makeatletter
+\ifdefined\KOMAClassName
+  \usepackage[automark]{scrlayer-scrpage}
+  % Reserve enough room for the running header and continued footer.
+  \KOMAoptions{headlines=2.2,footlines=1.3,headsepline=0.5pt,footsepline=0.5pt,plainfootsepline=true}
+  \pagestyle{scrheadings}
+  \clearpairofpagestyles
+  \ihead{\ifdefempty{\presscode}{\headmark}{\presscode}}
+  \ohead{\pressifset{\pressfields}{\pressfieldsinline}}
+  \cfoot[\pressfolio]{\pressfolio}
+  \ofoot[\presscontinued]{\presscontinued}
+  \setkomafont{pageheadfoot}{\normalfont\footnotesize}
+  \setkomafont{pagenumber}{\normalfont\footnotesize}
+
+  % Question-level headings are easy to scan without adding colour.
+  \setkomafont{disposition}{\normalfont\bfseries\color{pressink}}
+  \addtokomafont{section}{\Large}
+  \addtokomafont{subsection}{\large}
+  \RedeclareSectionCommand[
+    beforeskip=1.1\baselineskip plus 0.15\baselineskip minus 0.1\baselineskip,
+    afterskip=0.45\baselineskip plus 0.1\baselineskip
+  ]{section}
+  \RedeclareSectionCommand[
+    beforeskip=0.8\baselineskip plus 0.1\baselineskip minus 0.1\baselineskip,
+    afterskip=0.35\baselineskip plus 0.05\baselineskip
+  ]{subsection}
+  \@ifundefined{chapter}{}{\setkomafont{chapter}{\normalfont\bfseries\LARGE\color{pressink}}}
+\fi
+\makeatother
+
+\captionsetup{format=hang,skip=8pt}
+
+\renewenvironment{quote}{%
+  \def\FrameCommand{{\color{pressaccent}\vrule width 0.35mm}\hspace{0.9em}}%
+  \MakeFramed{\advance\hsize-\width\FrameRestore}\noindent}
+ {\endMakeFramed}
+
+% Booktabs rules and row spacing that stay legible in print. Quarto loads
+% booktabs before this file only when the document has tables.
+\makeatletter
+\@ifpackageloaded{booktabs}{%
+  \setlength{\heavyrulewidth}{0.09em}%
+  \setlength{\lightrulewidth}{0.06em}%
+  \setlength{\cmidrulewidth}{0.06em}}{}
+\makeatother
+\AtBeginEnvironment{longtable}{%
+  \renewcommand{\arraystretch}{1.12}%
+  \setlength{\tabcolsep}{6pt}}
+
+% Every callout gets the same soft grey box, with room to breathe across breaks.
+\AtBeginDocument{%
+  \hypersetup{linkcolor=presssecondary,urlcolor=presssecondary,citecolor=presssecondary}%
+  \colorlet{quarto-callout-color}{pressaccent}%
+  \colorlet{quarto-callout-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-note-color}{pressaccent}%
+  \colorlet{quarto-callout-note-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-tip-color}{pressaccent}%
+  \colorlet{quarto-callout-tip-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-warning-color}{pressaccent}%
+  \colorlet{quarto-callout-warning-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-important-color}{pressaccent}%
+  \colorlet{quarto-callout-important-color-frame}{pressaccent}%
+  \colorlet{quarto-callout-caution-color}{pressaccent}%
+  \colorlet{quarto-callout-caution-color-frame}{pressaccent}%
+  \tcbset{
+    top=4mm,
+    bottom=2mm,
+    right=2mm,
+    boxsep=1mm,
+    before skip=8pt,
+    after skip=8pt,
+    pad at break*=2mm,
+    frame hidden,
+    interior hidden,
+    borderline={0.35mm}{0mm}{pressaccent},
+    underlay unbroken={\path[fill=presssoft] (interior.south west) rectangle (interior.north east);},
+    underlay first={\path[fill=presssoft] (interior.south west) rectangle (interior.north east);},
+    underlay middle={\path[fill=presssoft] (interior.south west) rectangle (interior.north east);},
+    underlay last={\path[fill=presssoft] (interior.south west) rectangle (interior.north east);}
+  }}
+
+% Write-in fields. The filter defines \pressfields as a run of
+% \pressfielditem{label}; each layout below gives \pressfielditem its meaning.
+\newlength{\pressfieldgap}
+\setlength{\pressfieldgap}{1.6em}
+\newlength{\pressfieldcell}
+\newlength{\pressfieldlabel}
+\newcount\pressfieldcount
+\newcount\pressfieldindex
+
+% Running head: each label followed by a short rule.
+\newcommand*{\pressfieldsinline}{%
+  \begingroup
+  \pressfieldindex=0
+  \def\pressfielditem##1{%
+    \ifnum\pressfieldindex>0 \enspace\fi
+    \advance\pressfieldindex by 1\relax
+    ##1\enspace\underline{\hspace{3.4cm}}}%
+  \pressfields
+  \endgroup}
+
+% Header block: labelled boxes sharing the text width equally.
+\newcommand*{\pressfieldsboxed}{%
+  \begingroup
+  \pressfieldcount=0
+  \def\pressfielditem##1{\advance\pressfieldcount by 1\relax}%
+  \pressfields
+  \setlength{\pressfieldcell}{%
+    \dimexpr(\textwidth-\pressfieldgap*\numexpr\pressfieldcount-1\relax)/\pressfieldcount\relax}%
+  \setlength{\fboxsep}{0.9mm}%
+  \pressfieldindex=0
+  \def\pressfielditem##1{%
+    \ifnum\pressfieldindex>0 \hspace{\pressfieldgap}\fi
+    \advance\pressfieldindex by 1\relax
+    \settowidth{\pressfieldlabel}{\bfseries ##1\enspace}%
+    \makebox[\pressfieldcell][l]{\bfseries ##1\enspace
+      \fbox{\parbox[c][3ex][c]{\dimexpr\pressfieldcell-\pressfieldlabel-2\fboxsep-2\fboxrule\relax}{\strut}}}}%
+  \noindent\pressfields\par
+  \endgroup}
+
+% The title is a ruled two-column block on the first page. Rows with nothing
+% on either side are left out.
+\makeatletter
+\renewcommand{\maketitle}{%
+  \ifdefined\KOMAClassName\thispagestyle{plain.scrheadings}\else\thispagestyle{empty}\fi
+  \def\press@rows{{\Large\bfseries\presstitlefield} & \pressifset{\presslabel}{{\large\bfseries\presslabel}}\\}%
+  \ifboolexpr{test {\ifdefempty{\pressseries}} and test {\ifdefempty{\pressedition}}}{}{%
+    \appto\press@rows{\pressseries & \pressedition\\}}%
+  \ifboolexpr{test {\ifdefempty{\presssubtitle}} and test {\ifdefempty{\@subtitle}}
+      and test {\ifdefempty{\pressauthor}}}{}{%
+    \appto\press@rows{\presssubtitlefield & \pressauthorfield\\}}%
+  \vspace*{-\dimexpr\headheight+\headsep-0.15em\relax}%
+  \noindent\rule{\textwidth}{0.6pt}\par
+  \vspace{0.35em}%
+  \begingroup
+  \setlength{\tabcolsep}{0pt}%
+  \renewcommand{\arraystretch}{1.0}%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}X>{\raggedleft\arraybackslash}p{0.34\textwidth}@{}}
+  \press@rows
+  \end{tabularx}\par
+  \endgroup
+  \vspace{0.7em}%
+  \noindent\rule{\textwidth}{0.6pt}\par
+  \pressifset{\pressfields}{\vspace{0.3em}\pressfieldsboxed}%
+  \vspace{0.8em}}
+\makeatother

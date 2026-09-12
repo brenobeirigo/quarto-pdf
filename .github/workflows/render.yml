@@ -24,14 +24,14 @@ jobs:
           tlmgr_path="$(find "$HOME" -name tlmgr -print -quit)"
           test -n "$tlmgr_path"
           "$tlmgr_path" update --self
-          "$tlmgr_path" install tex-gyre inconsolata
+          "$tlmgr_path" install tex-gyre inconsolata libertinus-fonts
       - name: Install the extension into the example
         working-directory: example
         run: quarto add .. --no-prompt
       - name: Render every style
         working-directory: example
         run: |
-          for style in lucid classic minimal; do
+          for style in lucid classic minimal ledger; do
             quarto render "$style.qmd"
           done
       - uses: actions/upload-artifact@v4

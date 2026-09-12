@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.3.0
+
+- Add the `ledger` style, a ruled record sheet for exercises and exams: a
+  header block with write-in fields in place of a title page, running heads
+  between hairlines, soft grey callouts, a `page / total` folio, and a
+  "Continued next page" footer. It uses Libertinus when installed.
+- Add the `code` cover field, a short label for running heads.
+- Add the `fields` cover field, a list of write-in labels. Each entry becomes
+  `\pressfielditem{label}` so a style decides how to lay them out.
+
 ## 0.2.0
 
 - Rename the `dact` style to `lucid`, after its design rather than the course

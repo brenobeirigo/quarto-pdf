@@ -2,7 +2,7 @@
 -- title-page fields. Everything is injected into the LaTeX preamble in a fixed
 -- order: common layout, style, colour overrides, cover fields.
 
-local BUILTIN_STYLES = { lucid = true, classic = true, minimal = true }
+local BUILTIN_STYLES = { lucid = true, classic = true, minimal = true, ledger = true }
 local DEFAULT_STYLE = "lucid"
 
 -- Former style names that still resolve, with a deprecation warning.
@@ -23,7 +23,8 @@ local COLOR_ROLES = {
   ["soft"] = "presssoft",
 }
 
--- `press.cover` key -> macro read by the style's \maketitle.
+-- `press.cover` key -> macro read by the style's \maketitle. A field with an
+-- `item` macro wraps each list entry in it instead of joining with \presssep.
 local COVER_FIELDS = {
   { key = "title", macro = "presstitle" },
   { key = "subtitle", macro = "presssubtitle" },
@@ -33,6 +34,8 @@ local COVER_FIELDS = {
   { key = "label", macro = "presslabel" },
   { key = "tagline", macro = "presstagline" },
   { key = "edition", macro = "pressedition" },
+  { key = "code", macro = "presscode" },
+  { key = "fields", macro = "pressfields", item = "pressfielditem" },
 }
 
 local function fail(message)
@@ -78,6 +81,19 @@ local function to_latex(value)
     blocks = { pandoc.Plain({ pandoc.Str(pandoc.utils.stringify(value)) }) }
   end
   return trim(pandoc.write(pandoc.Pandoc(blocks), "latex"))
+end
+
+-- Render each entry as \<item>{...} so the style decides how to lay them out.
+local function to_latex_items(value, item)
+  local entries = value
+  if pandoc.utils.type(value) ~= "List" then
+    entries = { value }
+  end
+  local parts = {}
+  for _, entry in ipairs(entries) do
+    table.insert(parts, "\\" .. item .. "{" .. to_latex(entry) .. "}")
+  end
+  return table.concat(parts)
 end
 
 local function style_name(options)
@@ -126,7 +142,7 @@ local function style_source(name)
     end
     return content
   end
-  fail("unknown style '" .. name .. "'. Use lucid, classic, minimal, or a path to a .tex file")
+  fail("unknown style '" .. name .. "'. Use lucid, classic, minimal, ledger, or a path to a .tex file")
 end
 
 local function color_overrides(colors)
@@ -154,7 +170,11 @@ local function cover_definitions(cover)
   for _, field in ipairs(COVER_FIELDS) do
     local value = ""
     if cover ~= nil and cover[field.key] ~= nil then
-      value = to_latex(cover[field.key])
+      if field.item then
+        value = to_latex_items(cover[field.key], field.item)
+      else
+        value = to_latex(cover[field.key])
+      end
     end
     table.insert(lines, "\\def\\" .. field.macro .. "{" .. value .. "}")
   end

@@ -1,0 +1,47 @@
+---
+title: "Press PDF: the ledger style"
+subtitle: "A ruled header, write-in fields, and quiet grey callouts"
+author: "Ada Lovelace"
+format:
+  press-pdf:
+    documentclass: scrartcl
+    toc: false
+    number-sections: true
+    callout-appearance: simple
+    callout-icon: false
+    geometry:
+      - top=18mm
+      - bottom=18mm
+      - left=18mm
+      - right=18mm
+      - heightrounded
+    press:
+      style: ledger
+      cover:
+        label: Exercise sheet 3
+        series: Example University, Applied Statistics
+        edition: Friday, 18 September 2026
+        code: EX-03
+        fields: ["Student ID:", "Name:"]
+---
+
+{{< include _content.qmd >}}
+
+# Exercises
+
+## Estimate a mean
+
+A sample of eight delivery times, in minutes, reads 31, 28, 35, 30, 33, 29, 34
+and 32.
+
+1. Compute the sample mean and the sample standard deviation.
+2. State one assumption the estimate depends on.
+
+::: {.callout-tip title="Solution"}
+The sample mean is $\bar{x} = 252 / 8 = 31.5$ minutes. The squared deviations
+sum to 42, so the sample variance is $s^2 = 42 / 7 = 6$ and the standard
+deviation is $s = \sqrt{6} \approx 2.45$ minutes.
+
+The estimate assumes the eight deliveries are a random sample from the same
+process, for example that they were not all made on one unusually quiet day.
+:::
