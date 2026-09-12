@@ -2,8 +2,11 @@
 -- title-page fields. Everything is injected into the LaTeX preamble in a fixed
 -- order: common layout, style, colour overrides, cover fields.
 
-local BUILTIN_STYLES = { dact = true, classic = true, minimal = true }
-local DEFAULT_STYLE = "dact"
+local BUILTIN_STYLES = { lucid = true, classic = true, minimal = true }
+local DEFAULT_STYLE = "lucid"
+
+-- Former style names that still resolve, with a deprecation warning.
+local STYLE_ALIASES = { dact = "lucid" }
 
 -- Metadata key -> LaTeX colour name. Both spellings of the compound roles work.
 local COLOR_ROLES = {
@@ -81,7 +84,14 @@ local function style_name(options)
   if options == nil or options.style == nil then
     return DEFAULT_STYLE
   end
-  return pandoc.utils.stringify(options.style)
+  local name = pandoc.utils.stringify(options.style)
+  local renamed = STYLE_ALIASES[name]
+  if renamed ~= nil then
+    quarto.log.warning("press: the style '" .. name .. "' is now called '" .. renamed
+      .. "'. The old name will stop working in version 1.0.")
+    return renamed
+  end
+  return name
 end
 
 local function resolve_custom_style(path)
@@ -116,7 +126,7 @@ local function style_source(name)
     end
     return content
   end
-  fail("unknown style '" .. name .. "'. Use dact, classic, minimal, or a path to a .tex file")
+  fail("unknown style '" .. name .. "'. Use lucid, classic, minimal, or a path to a .tex file")
 end
 
 local function color_overrides(colors)

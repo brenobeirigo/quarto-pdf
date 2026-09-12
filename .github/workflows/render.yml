@@ -31,7 +31,7 @@ jobs:
       - name: Render every style
         working-directory: example
         run: |
-          for style in dact classic minimal; do
+          for style in lucid classic minimal; do
             quarto render "$style.qmd"
           done
       - uses: actions/upload-artifact@v4

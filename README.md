@@ -5,10 +5,10 @@ typeset KOMA-Script layout (fonts, margins, wrapped code, clamped figures,
 coloured callouts) and a designed title page. Pick the look with a single
 option.
 
-| `dact` | `classic` | `minimal` |
+| `lucid` | `classic` | `minimal` |
 |:------:|:---------:|:---------:|
-| ![dact cover](images/dact-cover.png) | ![classic cover](images/classic-cover.png) | ![minimal cover](images/minimal-cover.png) |
-| ![dact page](images/dact-page.png) | ![classic page](images/classic-page.png) | ![minimal page](images/minimal-page.png) |
+| ![lucid cover](images/lucid-cover.png) | ![classic cover](images/classic-cover.png) | ![minimal cover](images/minimal-cover.png) |
+| ![lucid page](images/lucid-page.png) | ![classic page](images/classic-page.png) | ![minimal page](images/minimal-page.png) |
 
 ## Install
 
@@ -28,7 +28,7 @@ format:
   press-pdf: default
 ```
 
-That renders with the `dact` style. Choose another style and fill in the title
+That renders with the `lucid` style. Choose another style and fill in the title
 page under `press`:
 
 ```yaml
@@ -52,9 +52,14 @@ the defaults below.
 
 | Style     | Headings                     | Running heads           | Title page                            |
 |-----------|------------------------------|-------------------------|---------------------------------------|
-| `dact`    | sans, green accent rule      | chapter left, page right | banded, left-aligned, label box       |
+| `lucid`   | sans, green accent rule      | chapter left, page right | banded, left-aligned, label box       |
 | `classic` | serif, centred chapter titles | italic, no rule         | centred, burgundy rules, small caps   |
 | `minimal` | sans, no decoration          | none; page number centred | quiet, left-aligned                  |
+
+`lucid` shares its palette with the
+[Lucid HTML theme](https://github.com/brenobeirigo/quarto-themes), so a book
+and its printed edition look alike. Before version 0.2.0 it was called
+`dact`. The old name still works but prints a deprecation warning.
 
 ### Your own style
 
@@ -75,7 +80,7 @@ All options live under the `press` key.
 
 | Option          | Default | Description |
 |-----------------|---------|-------------|
-| `style`         | `dact`  | `dact`, `classic`, `minimal`, or a path to a `.tex` file. |
+| `style`         | `lucid` | `lucid`, `classic`, `minimal`, or a path to a `.tex` file. |
 | `colors.<role>` | style's | Six-digit hex colour for a role. Quote values that start with `#`. |
 | `cover.<field>` | empty   | Title-page text. Markdown is allowed. A list is joined with the style's separator. |
 
@@ -159,7 +164,7 @@ format:
     mainfont: "TeX Gyre Pagella"
     sansfont: "TeX Gyre Heros"
     press:
-      style: dact
+      style: lucid
 ```
 
 ## Requirements
@@ -173,7 +178,7 @@ format:
 ```bash
 cd example
 quarto add .. --no-prompt
-quarto render dact.qmd
+quarto render lucid.qmd
 quarto render classic.qmd
 quarto render minimal.qmd
 ```
