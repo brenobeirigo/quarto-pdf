@@ -38,9 +38,9 @@ format:
       style: classic
       cover:
         institution: [Example University, Faculty of Engineering]
-        series: Course manual series
-        label: Module 1 course manual
-        tagline: [Formulate, Design, Trace, Test, Improve]
+        series: Practitioner handbooks
+        label: Reference handbook
+        tagline: [Plan, Draft, Review, Publish]
         edition: 2026 edition
 ```
 
@@ -124,8 +124,8 @@ A cover title with a manual line break:
 press:
   cover:
     title: |
-      Computational thinking\
-      and algorithm design
+      A practical guide\
+      to careful measurement
 ```
 
 ## Defaults
